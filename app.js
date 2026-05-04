@@ -118,3 +118,34 @@ modalCloseOverlay.addEventListener("click", (event) => {
   modalImage.src = "";
   modalImage.alt = "";
 });
+
+function debounce(fn, delay) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+const slider = document.querySelector(".slider__input");
+
+function resizeImage(value) {
+  modalImage.style.transform = `scale(${value / 100})`;
+}
+
+const debouncedResize = debounce((e) => {
+  resizeImage(e.target.value);
+}, 200);
+
+slider.addEventListener("input", debouncedResize);
+
+const box = document.getElementById("box");
+
+const moveBox = (e) => {
+  box.style.left = `${e.clientX}px`;
+  box.style.top = `${e.clientY}px`;
+};
+
+const debouncedMove = _.debounce(moveBox, 100);
+
+document.addEventListener("mousemove", debouncedMove);
